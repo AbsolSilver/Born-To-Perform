@@ -11,7 +11,12 @@ public class HalfWayTrig : MonoBehaviour
     // If we enter the collider, turn on the finish collider and turn off the halfway mark trigger.
     void OnTriggerEnter(Collider other)
     {
-        FinishTrig.SetActive(true);
-        HalfTrig.SetActive(false);
+        if (other.tag == "Car")
+        {
+            FinishTrig.SetActive(true);
+            HalfTrig.SetActive(false);
+            Debug.Log("Halfway mark has been entered");
+        }
+
     }
 }

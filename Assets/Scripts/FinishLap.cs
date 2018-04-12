@@ -9,8 +9,8 @@ namespace BornToPerform
     public class FinishLap : MonoBehaviour
     {
 
-        public GameObject FinishTrig, HalfwayTrig;
-            
+        public GameObject FinishTrig, HalfTrig;
+
         public GameObject MinsDisplay, SecsDisplay, MillisDisplay;
 
         public GameObject LapTimeBox;
@@ -45,9 +45,13 @@ namespace BornToPerform
                 SecsDisplay.GetComponent<Text>().text = "" + LapTimeManager.SecsCount + ".";
             }
 
-            // Turn on the halfway trigger and turn off the finish trigger.
-            HalfwayTrig.SetActive(true);
-            FinishTrig.SetActive(false);
+            if (other.tag == "Car")
+            {
+                // Turn on the halfway trigger and turn off the finish trigger.
+                FinishTrig.SetActive(false);
+                HalfTrig.SetActive(true);
+                Debug.Log("Finish mark has been entered");
+            }
         }
     }
 }
