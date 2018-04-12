@@ -352,7 +352,6 @@ public class MainMenu : MonoBehaviour
                     }
                 }
                 #endregion
-
                 #region Save & Return to Main Menu
 
                 if (GUI.Button(new Rect(12f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Apply"))

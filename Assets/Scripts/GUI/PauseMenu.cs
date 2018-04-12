@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    #region Variables
     public bool isPaused;
     public bool showOptions;
     public bool showResolution;
     public bool isMute;
-    public float audioSlider, brightnessSlider;
+    public float audioSlider, brightnessSlider, amBrightSlider;
     public int index;
     public int[] resX, resY;
     public KeyCode forward;
@@ -16,21 +18,89 @@ public class PauseMenu : MonoBehaviour
     public KeyCode TurnLeft;
     public KeyCode TurnRight;
     public KeyCode holdingKey;
-
+    public AudioSource mainMusic;
+    public Light brightness;
     public float scrW = Screen.width / 16;
     public float scrH = Screen.height / 9;
-
     public Vector2[] res;
+
     public bool showDropdown = true;
     public Vector2 scrollPos;
     public string resolution = "Resolution";
     public bool isFullscreen, isWindowed;
 
+    #endregion
+
+    private void Start()
+    {
+        #region Screen References
+        scrW = Screen.width / 16;
+        scrH = Screen.height / 9;
+        #endregion
+
+        #region Audio and Brightness References
+        brightness = GameObject.FindGameObjectWithTag("PauseMenu").GetComponent<Light>();
+        mainMusic = GameObject.FindGameObjectWithTag("PauseMenu").GetComponent<AudioSource>();
+
+        if (PlayerPrefs.HasKey("Mute"))
+        {
+            RenderSettings.ambientIntensity = PlayerPrefs.GetFloat("AmLight");
+            brightness.intensity = PlayerPrefs.GetFloat("DirLight");
+            brightnessSlider = brightness.intensity;
+            amBrightSlider = RenderSettings.ambientIntensity;
+            audioSlider = PlayerPrefs.GetFloat("MainMusicVolume");
+
+            if (PlayerPrefs.GetInt("Mute") == 0)
+            {
+                isMute = true;
+                mainMusic.volume = 0;
+            }
+            else
+            {
+                isMute = false;
+                audioSlider = mainMusic.volume;
+            }
+        }
+        else
+        {
+            audioSlider = mainMusic.volume;
+            brightnessSlider = brightness.intensity;
+            amBrightSlider = RenderSettings.ambientIntensity;
+        }
+        #endregion
+
+        #region Keybinding References
+        forward = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Forward", "UpArrow"));
+        reverse = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Reverse", "DownArrow"));
+        TurnLeft = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Turn Left", "LeftArrow"));
+        TurnRight = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Turn Right", "RightArrow"));
+        #endregion
+    }
+
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Return))
         {
             isPaused = true;
+            mainMusic.Stop();
+            Time.timeScale = 0;
+        }
+
+        if (showOptions)
+        {
+            if (mainMusic.volume != audioSlider)
+            {
+                mainMusic.volume = audioSlider;
+            }
+            if (brightness.intensity != brightnessSlider)
+            {
+                brightness.intensity = brightnessSlider;
+            }
+            if (RenderSettings.ambientIntensity != amBrightSlider)
+            {
+                RenderSettings.ambientIntensity = amBrightSlider;
+            }
+
         }
     }
 
@@ -41,30 +111,36 @@ public class PauseMenu : MonoBehaviour
 
         if (isPaused == true)
         {
-            GUI.Box(new Rect(7f * scrW, 2.5f * scrH, 3 * scrH, 5 * scrH), "");
+            GUI.Box(new Rect(6.5f * scrW, 2.5f * scrH, 3 * scrH, 5 * scrH), "");
+            GUI.Box(new Rect(7.5f * scrW, 2.5f * scrH, 1 * scrW, 0.5f * scrH), "Paused");
 
-            #region Play
-            if (GUI.Button(new Rect(4 * scrW, 4.5f * scrH, 8 * scrW, 1 * scrH), "Resume"))
+            #region Resume
+            if (GUI.Button(new Rect(7.25f * scrW, 3.5f * scrH, 1.5f * scrW, 0.5f * scrH), "Resume"))
             {
                 // Disabled pause
                 isPaused = false;
                 // Resumes the game
+                Time.timeScale = 1;
+                mainMusic.Play();
 
             }
             #endregion
             #region Options
-            if (GUI.Button(new Rect(4 * scrW, 5.5f * scrH, 8 * scrW, 1 * scrH), "Options"))
+            if (GUI.Button(new Rect(7.25f * scrW, 4.5f * scrH, 1.5f * scrW, 0.5f * scrH), "Options"))
             {
                 showOptions = true;
+                isPaused = false;
+                mainMusic.Play();
             }
             #endregion
-
             #region Exit To Main Menu
-
+            if (GUI.Button(new Rect(7.25f * scrW, 5.5f * scrH, 1.5f * scrW, 0.5f * scrH), "Exit"))
+            {
+                SceneManager.LoadScene(0);
+            }
             #endregion
-
             #region Quit
-            if (GUI.Button(new Rect(4 * scrW, 6.5f * scrH, 8 * scrW, 1 * scrH), "Quit"))
+            if (GUI.Button(new Rect(7.25f * scrW, 6.5f * scrH, 1.5f * scrW, 0.5f * scrH), "Quit"))
             {
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
@@ -76,7 +152,6 @@ public class PauseMenu : MonoBehaviour
         if (showOptions == true)
         {
             #region Backgrounds
-            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
             GUI.Box(new Rect(0.25f * scrW, 0.25f * scrH, 7.625f * scrW, 8.5f * scrH), "");
             GUI.Box(new Rect(8.125f * scrW, 0.25f * scrH, 7.625f * scrW, 8.5f * scrH), "");
             #endregion
@@ -280,27 +355,9 @@ public class PauseMenu : MonoBehaviour
             if (GUI.Button(new Rect(14f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Back"))
             {
                 showOptions = false;
+                isPaused = true;
             }
             #endregion
         }
-    }
-
-    bool TogglePause()
-    {
-        return true && false;
-        /*
-   if paused
-       start time
-       unpause
-       lock cursor
-       hider cursor
-       false
-   else
-       stop time
-       pause
-       unlock cursor
-       show cursor
-       true
-*/
     }
 }
