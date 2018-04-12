@@ -9,7 +9,7 @@ public class HalfWayTrig : MonoBehaviour
     public GameObject HalfTrig;
 
     // If we enter the collider, turn on the finish collider and turn off the halfway mark trigger.
-    void OnTriggerEnter()
+    void OnTriggerEnter(Collider other)
     {
         FinishTrig.SetActive(true);
         HalfTrig.SetActive(false);

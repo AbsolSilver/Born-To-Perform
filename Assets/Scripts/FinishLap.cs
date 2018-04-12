@@ -16,7 +16,7 @@ namespace BornToPerform
         public GameObject LapTimeBox;
 
         // when we enter the collider, show the player's best record time
-        void OnTriggerEnter()
+        void OnTriggerEnter(Collider other)
         {
             if (LapTimeManager.SecsCount <= 9)
             {
