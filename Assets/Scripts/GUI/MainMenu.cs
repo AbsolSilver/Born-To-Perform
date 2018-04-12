@@ -84,7 +84,6 @@ public class MainMenu : MonoBehaviour
         #endregion
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -159,10 +158,9 @@ public class MainMenu : MonoBehaviour
                 }
                 #endregion
             }
-            else
+            if (showOptions == true)
             {
                 #region Backgrounds
-                GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
                 GUI.Box(new Rect(0.25f * scrW, 0.25f * scrH, 7.625f * scrW, 8.5f * scrH), "");
                 GUI.Box(new Rect(8.125f * scrW, 0.25f * scrH, 7.625f * scrW, 8.5f * scrH), "");
                 #endregion
@@ -182,11 +180,6 @@ public class MainMenu : MonoBehaviour
                 GUI.Box(new Rect(12.75f * scrW, 1f * scrH, 1f * scrW, .5f * scrH), "Reverse");
                 GUI.Box(new Rect(9.75f * scrW, 2f * scrH, 1f * scrW, .5f * scrH), "Turn Left");
                 GUI.Box(new Rect(12.75f * scrW, 2f * scrH, 1f * scrW, .5f * scrH), "Turn Right");
-
-                GUI.Button(new Rect(12f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Apply");
-                GUI.Button(new Rect(14f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Back");
-
-
                 Event e = Event.current;
                 #endregion
                 #region Fullscreen and Windowed Toggles
@@ -361,6 +354,7 @@ public class MainMenu : MonoBehaviour
                 #endregion
 
                 #region Save & Return to Main Menu
+
                 if (GUI.Button(new Rect(12f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Apply"))
                 {
                     PlayerPrefs.SetString("Forward", forward.ToString());
@@ -368,10 +362,9 @@ public class MainMenu : MonoBehaviour
                     PlayerPrefs.SetString("Turn Left", TurnLeft.ToString());
                     PlayerPrefs.SetString("Turn Right", TurnRight.ToString());
                 }
-                if(GUI.Button(new Rect(14f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Back"))
+                if (GUI.Button(new Rect(14f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Back"))
                 {
                     showOptions = false;
-                    loadScreen = true;
                 }
                 #endregion
             }
