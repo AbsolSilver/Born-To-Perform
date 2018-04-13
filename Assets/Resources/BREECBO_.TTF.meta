@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: eaedd016cf7cc3346851dca39ab3e9ba
+timeCreated: 1523605128
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: BreezedCaps
+  fontNames:
+  - BreezedCaps
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -46,6 +46,35 @@ namespace BornToPerform
         public Vector2 scrollPos;
         public string resolution = "Resolution";
         public bool isFullscreen, isWindowed;
+        [Space(3)]
+        #endregion
+        #region GUI Skin and Styles
+        [Header("GUI Skins and Style")]
+        public GUISkin BTPskin;
+        public GUIStyle Logo;
+        public GUIStyle ClickToContinue;
+        public GUIStyle Audio;
+        public GUIStyle Brightness;
+        public GUIStyle Resolutions;
+        public GUIStyle Controls;
+        public GUIStyle Forward;
+        public GUIStyle Reverse;
+        public GUIStyle Left;
+        public GUIStyle Right;
+        public GUIStyle Apply;
+        public GUIStyle Back;
+        public GUIStyle ResolutionButton;
+        public GUIStyle ResSelectionButton;
+        public GUIStyle ForwardButton;
+        public GUIStyle ReverseButton;
+        public GUIStyle LeftButton;
+        public GUIStyle RightButton;
+        public GUIStyle ForwardString;
+        public GUIStyle ReverseString;
+        public GUIStyle LeftString;
+        public GUIStyle RightString;
+        public GUIStyle AudioString;
+        public GUIStyle BrightnessString;
         #endregion
         #endregion
 
@@ -103,6 +132,14 @@ namespace BornToPerform
         // Update is called once per frame
         void Update()
         {
+            #region Screen size
+            // Making sure the GUI is centered on the screen
+            if (Screen.width / 16 != scrW || Screen.height / 9 != scrH)
+            {
+                scrW = Screen.width / 16;
+                scrH = Screen.height / 9;
+            }
+            #endregion
             #region Loadscreen
             // if loadscreen = true, clicking will go the main menu
             if (loadScreen == true)
@@ -132,12 +169,15 @@ namespace BornToPerform
 
         public void OnGUI()
         {
+            // Getting the Born To Perform GUI skin
+            GUI.skin = BTPskin;
+
             // if loadscreen = true, display the background, logo and the click to continue notice
             if (loadScreen == true)
             {
                 #region Background, Logo and Any Key to continue
-                GUI.Box(new Rect(2 * scrW, 2f * scrH, 12 * scrW, 2 * scrH), "Born To Perform");
-                GUI.Box(new Rect(4 * scrW, 6.5f * scrH, 8 * scrW, 1 * scrH), "Click To Continue");
+                GUI.Box(new Rect(2 * scrW, 2f * scrH, 12 * scrW, 2 * scrH), "" , Logo);
+                GUI.Box(new Rect(4 * scrW, 7.5f * scrH, 8 * scrW, 1 * scrH), "Click To Continue", ClickToContinue);
                 #endregion
             }
             else
@@ -145,8 +185,8 @@ namespace BornToPerform
                 // if showOptions and loadscreen = false, show the main menu (Logo, Play, Options and Exit buttons)
                 if (showOptions == false)
                 {
-                    #region Background and Logo
-                    GUI.Box(new Rect(2 * scrW, 2f * scrH, 12 * scrW, 2 * scrH), "Born To Perform");
+                    #region Logo
+                    GUI.Box(new Rect(2 * scrW, 2f * scrH, 12 * scrW, 2 * scrH), "", Logo);
                     #endregion
                     #region Play
                     // if Play is pressed, load up the game
@@ -178,37 +218,39 @@ namespace BornToPerform
                 {
                     #region Backgrounds
                     GUI.Box(new Rect(0.25f * scrW, 0.25f * scrH, 7.625f * scrW, 8.5f * scrH), "");
+                    GUI.Box(new Rect(0.25f * scrW, 0.25f * scrH, 7.625f * scrW, 8.5f * scrH), "");
                     GUI.Box(new Rect(8.125f * scrW, 0.25f * scrH, 7.625f * scrW, 8.5f * scrH), "");
+                    GUI.Box(new Rect(0.25f * scrW, 0.25f * scrH, 7.625f * scrW, 8.5f * scrH), "");
                     #endregion
                     #region Headings
                     // Headings from all our options
-                    GUI.Box(new Rect(0.5f * scrW, 0.5f * scrH, 7.125f * scrW, 1f * scrH), "Audio");
+                    GUI.Box(new Rect(0.5f * scrW, 0.5f * scrH, 7.125f * scrW, 1f * scrH), "Audio", Audio);
                     audioSlider = GUI.HorizontalSlider(new Rect(0.5f * scrW, 1f * scrH, 7.125f * scrW, 0.25f * scrH), audioSlider, 0.0f, 1.0f);
-                    GUI.Label(new Rect(4f * scrW, 1.125f * scrH, 0.75f * scrW, 0.25f * scrH), Mathf.FloorToInt(audioSlider * 100).ToString());
+                    GUI.Label(new Rect(4f * scrW, 1.125f * scrH, 0.75f * scrW, 0.25f * scrH), Mathf.FloorToInt(audioSlider * 100).ToString(), AudioString);
 
-                    GUI.Box(new Rect(0.5f * scrW, 1.5f * scrH, 7.125f * scrW, 1f * scrH), "Brightness");
+                    GUI.Box(new Rect(0.5f * scrW, 1.5f * scrH, 7.125f * scrW, 1f * scrH), "Brightness", Brightness);
                     brightnessSlider = GUI.HorizontalSlider(new Rect(0.5f * scrW, 2f * scrH, 7.125f * scrW, 0.25f * scrH), brightnessSlider, 0.0f, 1.0f);
-                    GUI.Label(new Rect(4f * scrW, 2.125f * scrH, 0.75f * scrW, 0.25f * scrH), Mathf.FloorToInt(brightnessSlider * 100).ToString());
+                    GUI.Label(new Rect(4f * scrW, 2.125f * scrH, 0.75f * scrW, 0.25f * scrH), Mathf.FloorToInt(brightnessSlider * 100).ToString(), BrightnessString);
 
-                    GUI.Box(new Rect(0.5f * scrW, 2.5f * scrH, 7.125f * scrW, 6f * scrH), "Resolutions");
+                    GUI.Box(new Rect(0.5f * scrW, 2.5f * scrH, 7.125f * scrW, 6f * scrH), "Resolutions", Resolutions);
 
-                    GUI.Box(new Rect(8.4f * scrW, 0.25f * scrH, 7.125f * scrW, 8f * scrH), "Controls");
-                    GUI.Box(new Rect(9.75f * scrW, 1f * scrH, 1f * scrW, .5f * scrH), "Forward");
-                    GUI.Box(new Rect(12.75f * scrW, 1f * scrH, 1f * scrW, .5f * scrH), "Reverse");
-                    GUI.Box(new Rect(9.75f * scrW, 2f * scrH, 1f * scrW, .5f * scrH), "Turn Left");
-                    GUI.Box(new Rect(12.75f * scrW, 2f * scrH, 1f * scrW, .5f * scrH), "Turn Right");
+                    GUI.Box(new Rect(8.4f * scrW, 0.25f * scrH, 7.125f * scrW, 8f * scrH), "Controls", Controls);
+                    GUI.Box(new Rect(9.75f * scrW, 1f * scrH, 1f * scrW, .5f * scrH), "Forward", Forward);
+                    GUI.Box(new Rect(12.75f * scrW, 1f * scrH, 1f * scrW, .5f * scrH), "Reverse", Reverse);
+                    GUI.Box(new Rect(9.75f * scrW, 2f * scrH, 1f * scrW, .5f * scrH), "Turn Left", Left);
+                    GUI.Box(new Rect(12.75f * scrW, 2f * scrH, 1f * scrW, .5f * scrH), "Turn Right", Right);
                     Event e = Event.current;
                     #endregion
                     #region Fullscreen and Windowed Toggles
                     // if Fullscreen toggle is pressed, enable isFullScreen and disable isWindowed
-                    if (GUI.Toggle(new Rect(5.5f * scrW, 4.5f * scrH, 2 * scrW, 0.5f * scrH), isFullscreen, "Fullscreen"))
+                    if (GUI.Toggle(new Rect(4.5f * scrW, 4.5f * scrH, 2 * scrW, 0.5f * scrH), isFullscreen, "    Fullscreen"))
                     {
                         Screen.fullScreen = true;
                         isFullscreen = true;
                         isWindowed = false;
                     }
-                //    if Windowed toggle is pressed, enable isWindowed and disable isFullscreen
-                    if (GUI.Toggle(new Rect(5.5f * scrW, 6f * scrH, 2 * scrW, 0.5f * scrH), isWindowed, "Windowed"))
+                    //    if Windowed toggle is pressed, enable isWindowed and disable isFullscreen
+                    if (GUI.Toggle(new Rect(4.5f * scrW, 6f * scrH, 2 * scrW, 0.5f * scrH), isWindowed, "     Windowed"))
                     {
                         Screen.fullScreen = false;
                         isFullscreen = false;
@@ -217,20 +259,19 @@ namespace BornToPerform
                     #endregion
                     #region Resolution dropdown
                     // if resolution button is pressed, show the resolution selection dropdown
-                    if (GUI.Button(new Rect(scrW, 4 * scrH, 2 * scrW, 0.5f * scrH), resolution)) 
+                    if (GUI.Button(new Rect(scrW, 4 * scrH, 2 * scrW, 0.5f * scrH), resolution, ResolutionButton))
                     {
-                        showDropdown = !showDropdown; 
+                        showDropdown = !showDropdown;
                     }
                     // if the Dropdown bool is true, make a scrollbar
-                    if (showDropdown) 
+                    if (showDropdown)
                     {
                         // scrollPos = scroll view
-                        // start the scroll view
                         scrollPos = GUI.BeginScrollView(new Rect(scrW, 4.5f * scrH, 2.5f * scrW, 2f * scrH), scrollPos, new Rect(0, 0, 2 * scrW, 3.5f * scrH), false, true);
                         for (int i = 0; i < res.Length; i++) // for all the options
                         {
                             // if each resolution button is pressed, set the new resolution, disable dropdown and set the new resolution to the resolution button 
-                            if (GUI.Button(new Rect(0, 0 + (0.5f * scrH) * i, 1.75f * scrW, 0.5f * scrH), res[i].x + "x" + res[i].y))
+                            if (GUI.Button(new Rect(0, 0 + (0.5f * scrH) * i, 1.75f * scrW, 0.5f * scrH), res[i].x + "x" + res[i].y, ResSelectionButton))
                             {
                                 Screen.SetResolution((int)res[i].x, (int)res[i].y, isFullscreen);
                                 showDropdown = false;
@@ -248,7 +289,7 @@ namespace BornToPerform
                     if (!(reverse == KeyCode.None || TurnLeft == KeyCode.None || TurnRight == KeyCode.None))
                     {
                         // if forward is pressed, Transfer tthe old forward key to holding key
-                        if (GUI.Button(new Rect(9f * scrW, 1.5f * scrH, 2.5f * scrW, .5f * scrH), forward.ToString()))
+                        if (GUI.Button(new Rect(9f * scrW, 1.5f * scrH, 2.5f * scrW, .5f * scrH), forward.ToString(), ForwardButton))
                         {
                             holdingKey = forward;
                             forward = KeyCode.None;
@@ -257,7 +298,7 @@ namespace BornToPerform
                     else
                     {
                         // the default forward key
-                        GUI.Box(new Rect(9f * scrW, 1.5f * scrH, 2.5f * scrW, .5f * scrH), forward.ToString());
+                        GUI.Box(new Rect(9f * scrW, 1.5f * scrH, 2.5f * scrW, .5f * scrH), forward.ToString(), ForwardString);
                     }
                     #endregion
                     #region Reverse
@@ -265,7 +306,7 @@ namespace BornToPerform
                     if (!(forward == KeyCode.None || TurnLeft == KeyCode.None || TurnRight == KeyCode.None))
                     {
                         // if reverse is pressed, transfer the old reverse key to holding key
-                        if (GUI.Button(new Rect(12f * scrW, 1.5f * scrH, 2.5f * scrW, .5f * scrH), reverse.ToString()))
+                        if (GUI.Button(new Rect(12f * scrW, 1.5f * scrH, 2.5f * scrW, .5f * scrH), reverse.ToString(), ReverseButton))
                         {
                             holdingKey = reverse;
                             reverse = KeyCode.None;
@@ -274,7 +315,7 @@ namespace BornToPerform
                     else
                     {
                         // the default reverse key
-                        GUI.Box(new Rect(12f * scrW, 1.5f * scrH, 2.5f * scrW, .5f * scrH), reverse.ToString());
+                        GUI.Box(new Rect(12f * scrW, 1.5f * scrH, 2.5f * scrW, .5f * scrH), reverse.ToString(), ReverseString);
                     }
                     #endregion
                     #region Turn Left
@@ -282,7 +323,7 @@ namespace BornToPerform
                     if (!(forward == KeyCode.None || reverse == KeyCode.None || TurnRight == KeyCode.None))
                     {
                         // if Turn Left is pressed, transfer old TurnLeft key to holding key
-                        if (GUI.Button(new Rect(9f * scrW, 2.5f * scrH, 2.5f * scrW, .5f * scrH), TurnLeft.ToString()))
+                        if (GUI.Button(new Rect(9f * scrW, 2.5f * scrH, 2.5f * scrW, .5f * scrH), TurnLeft.ToString(), LeftButton))
                         {
                             holdingKey = TurnLeft;
                             TurnLeft = KeyCode.None;
@@ -291,13 +332,13 @@ namespace BornToPerform
                     else
                     {
                         // the default Turn Left key
-                        GUI.Box(new Rect(9f * scrW, 2.5f * scrH, 2.5f * scrW, .5f * scrH), TurnLeft.ToString());
+                        GUI.Box(new Rect(9f * scrW, 2.5f * scrH, 2.5f * scrW, .5f * scrH), TurnLeft.ToString(), LeftString);
                     }
                     #endregion
                     #region Turn Right
                     if (!(forward == KeyCode.None || reverse == KeyCode.None || TurnLeft == KeyCode.None))
                     {
-                        if (GUI.Button(new Rect(12f * scrW, 2.5f * scrH, 2.5f * scrW, .5f * scrH), TurnRight.ToString()))
+                        if (GUI.Button(new Rect(12f * scrW, 2.5f * scrH, 2.5f * scrW, .5f * scrH), TurnRight.ToString(), RightButton))
                         {
                             holdingKey = TurnRight;
                             TurnRight = KeyCode.None;
@@ -305,7 +346,7 @@ namespace BornToPerform
                     }
                     else
                     {
-                        GUI.Box(new Rect(12f * scrW, 2.5f * scrH, 2.5f * scrW, .5f * scrH), TurnRight.ToString());
+                        GUI.Box(new Rect(12f * scrW, 2.5f * scrH, 2.5f * scrW, .5f * scrH), TurnRight.ToString(), RightString);
                     }
                     #endregion
                     #endregion
@@ -415,7 +456,7 @@ namespace BornToPerform
                     #region Save & Return to Main Menu
 
                     // if Apply is pressed, save the custom keybinding
-                    if (GUI.Button(new Rect(12f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Apply"))
+                    if (GUI.Button(new Rect(12f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Apply", Apply))
                     {
                         PlayerPrefs.SetString("Forward", forward.ToString());
                         PlayerPrefs.SetString("Reverse", reverse.ToString());
@@ -423,7 +464,7 @@ namespace BornToPerform
                         PlayerPrefs.SetString("Turn Right", TurnRight.ToString());
                     }
                     // if Back is pressed, disable showOptions and return to the main menu
-                    if (GUI.Button(new Rect(14f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Back"))
+                    if (GUI.Button(new Rect(13.5f * scrW, 8.35f * scrH, 1.5f * scrW, .25f * scrH), "Back", Back))
                     {
                         showOptions = false;
                     }
